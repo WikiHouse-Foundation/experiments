@@ -33,7 +33,7 @@
 		var info = document.body.appendChild( document.createElement( 'div' ) );
 		info.style.cssText = 'margin: 20px; max-height: 900px; max-width: 300px; position: absolute; overflow: auto; ';
 		info.innerHTML = '<a href="" ><h1>' + document.title + '</h1></a>' +
-			'<p id=msg >This demo loads an AutoCAD 2007 formatted DXF files and displays the dat<br>' +
+			'<p id=msg >This demo loads an AutoCAD 2007 formatted DXF files and displays the data<br>' +
 			'1. Nested and ready to be cut out - in blue. <br>' +
 			'2. Cut out and assembled - in white. <br>' +
 			'3. Flat shapes (at 0,0,0) ready for data extraction - in magenta</p>' +
@@ -66,11 +66,13 @@
 		var axisHelper = new THREE.AxisHelper( 2000 );
 		scene.add( axisHelper );
 
+		particleMaterial = new THREE.SpriteMaterial( { color: 0xff0000 } );
+
 		raycaster = new THREE.Raycaster();
 		mouse = new THREE.Vector2();
 
-		document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-		document.addEventListener( 'touchstart', onDocumentTouchStart, false ); // for mobile
+		renderer.domElement.addEventListener( 'mousedown', onDocumentMouseDown, false );
+		renderer.domElement.addEventListener( 'touchstart', onDocumentTouchStart, false ); // for mobile
 
 		requestFile( fileName );
 
@@ -160,7 +162,7 @@
 
 		mesh = new THREE.Mesh( geometry, material );
 
-		var z = index === 22 ? -320 : -300;
+		var z = index === 22 || index === 26 ? -320 : -300;
 		mesh.position.set( mesh.position.x - 40800, mesh.position.y - 27500, z );
 		mesh.userData.componentID = index;
 		scene.add( mesh );
@@ -224,7 +226,7 @@
 
 			v = geometry.vertices[ i ];
 
-			txt += Math.round( v.x ) + ',' + Math.round( v.y ) + ' ';
+			txt += ( v.x ).toFixed( 1 ) + ',' + ( v.y ).toFixed( 1 ) + ' ';
 		}
 
 		msg2.innerHTML += txt + '<br>';
@@ -258,6 +260,29 @@
 			intersected = intersects[ 0 ].object;
 //			intersected.material.color.setHex( Math.random() * 0xffffff );
 
+			verts = intersected.geometry.vertices;
+			dis = 1000000000;
+			ip = intersects[ 0 ].point;
+
+			for ( var i = 0; i < verts.length; i++ ) {
+
+				vert = verts[ i ].clone();
+				vert.applyMatrix4( intersected.matrixWorld );
+				d = vert.distanceTo( ip );
+				if ( d < dis ) {
+					dis = d;
+					pt = vert;
+				}
+
+			}
+
+			 particle = new THREE.Sprite( particleMaterial );
+
+			particle.position.copy( pt );
+			particle.scale.x = particle.scale.y = 20;
+			scene.add( particle );
+
+
 			headsUp.style.left = 50 + 0.5 * window.innerWidth + mouse.x * 0.5 * window.innerWidth + 'px';
 			headsUp.style.top = -10 + 0.5 * window.innerHeight - mouse.y * 0.5 * window.innerHeight + 'px';
 			headsUp.style.display = '';
@@ -267,6 +292,9 @@
 				'Three.js id:' + intersected.id + '<br>' +
 				'UUID:' + intersected.uuid + '<br>' +
 				'Type: ' + intersected.type + '<br>' +
+				'Point x: ' + intersects[ 0 ].point.x.toFixed(2) + ' y:' + intersects[ 0 ].point.y.toFixed(2) + ' z:' + intersects[ 0 ].point.z.toFixed(2) + '<br>' +
+				'vertex x:' + pt.x.toFixed(2) + ' y:' + pt.y.toFixed(2) + ' z:' + pt.z.toFixed(2) + '<br>' +
+
 			'';
 
 		} else {
