@@ -3,7 +3,6 @@ Display WikiHouse Studio2 Read Me
 
 <span style=display:none; >[View as web page]( http://WikiHouse-Foundation.github.io/index.html#./experiments/display-wikihouse-studio2/readme.md# "view the files as apps." ) <input value="<< You are here" size=15 style="font:bold 11pt monospace;border-width:0;" ></span>  
 
-
 [WikiHouse]( http://www.wikihouse.cc/ )  
 WikiHouse is an open source building system. Many designers, collaborating to make it simple for everyone to design, print and assemble beautiful, low-energy homes, customised to their needs.
 
@@ -24,10 +23,14 @@ Latest release: [Display WikiHouse Studio2]( http://WikiHouse-Foundation.github.
 * Enables real-time zoom, pan and rotate of the design
 * Views have shade and shadow
 * Slider bar controls exploded view
+* Buttons for
+	* Section View
+	* Plan View
+	* Reset View
 * Highlight and heads-up display of clicked-on object properties
-	* Will eventually display link to spec clause, IFC, bom etc
+	* Will eventually display link to spec clause, IFC, BofM etc
 * Background is three circular gradients with random colors
-
+* Slide-out menu enables basic operation on mobile device
 
 ### Road Map
 
@@ -61,6 +64,12 @@ All design information shared in the WikiHouse commons is shared under a CC-BY-S
 
 
 ### Change Log
+
+2015-05-04 ~ Theo
+
+* R4
+* Add slide out menu
+* Adds Section View, Plan View and Reset View
 
 2015-05-02 ~ Theo
 
