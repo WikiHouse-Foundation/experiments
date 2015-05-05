@@ -35,28 +35,17 @@
 		'';
 
 		header = document.body.appendChild( document.createElement( 'div' ) );
-		header.style.cssText = 'position: absolute; left: 350px; top: 20px; transition: left 1s; ';
+		header.style.cssText = 'position: absolute; left: 280px; top: 20px; transition: left 1s; ';
 		header.innerHTML = '<h1><a href=JavaScript:slideMenu(); id=bars >&#9776;</a></h1>';
 
 		menu = header.appendChild( document.createElement( 'div' ) );
-		menu.style.cssText = 'background-color: #eee; left: -350px; max-width: 300px; opacity: 0.85; padding: 0 15px; position: absolute; top: 0;';
-
-		menu.innerHTML = '<h1>' +
-				'<a href="" >' + document.title + '</a> - ' +
-				'<a id=i href=index.html#./readme.md# >&#x24D8;</a>' +
-			'</h1>' +
-			'<p>abc def ghi</p>' +
-			'<p id=msg ></p>' +
-		'';
-
-
-//		info = document.body.appendChild( document.createElement( 'div' ) );
-//		info.style.cssText = 'left: 20px; position: absolute; top: 0px; ';
-		menu.innerHTML = '<h1><a href="" >' + document.title + '</a> - ' +
+		menu.style.cssText = 'background-color: #fff; left: -290px; max-width: 240px; opacity: 0.5; padding: 0 15px; position: absolute; top: 0;';
+		menu.innerHTML = '<h2><a href="" >' + document.title + '</a> - ' +
 			'<a id=i href=http://wikihouse-foundation.github.io/index.html#./experiments/display-wikihouse-studio2/readme.md# >&#x24D8;</a>' +
-			'</h1>' +
+			'</h2>' +
 			'<p>Exploded View<br><input type=range id=inpStretch min=10 max=100 value=10 step=5 onchange=setExplodeStructure(); /></p>' +
-			'<p><button onclick=viewSection(); >Section View</button> <button onclick=viewPlan(); >Plan View</button> <button onclick=viewReset(); >Reset View</button></p>' +
+			'<p><button onclick=viewSection(); >Section View</button> <button onclick=viewPlan(); >Plan View</button></p>' +
+			'<p><button onclick=viewReset(); >Reset View</button></p>' +
 			'<p>Click on any component to view some of its details<br>- the app will eventually link to data from a Google Apps spreadsheet</p>' +
 			'<div id=msg></div>' +
 		'';
@@ -185,7 +174,7 @@
 
 	function slideMenu(){
 
-		header.style.left = header.style.left === '20px' ? '350px' : '20px';
+		header.style.left = header.style.left === '20px' ? '300px' : '20px';
 
 	}
 
