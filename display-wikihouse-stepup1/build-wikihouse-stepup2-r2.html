@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang=en >
 <head>
-<title>build-wikihouse-stepup-r1.html</title>
+<title>build-wikihouse-stepup-r2.html</title>
 <meta charset=utf-8 />
 <meta name=viewport content='width=device-width,user-scalable=no,minimum-scale=1.0,maximum-scale=1.0' />
 </head>
@@ -12,7 +12,9 @@
 <script>
 
   
-	var obj = new THREE.Object3D();
+	var topStep = new THREE.Object3D();
+	var bottomStep = new THREE.Object3D();
+	var spreader = new THREE.Object3D();
 
 	var thickness = 18;
 	var pi = Math.PI;
@@ -66,9 +68,71 @@
 		var axisHelper = new THREE.AxisHelper( 50 );
 		scene.add( axisHelper );
 
-		scene.add( obj );
-
+		scene.add( topStep );
 		buildTopStep();
+
+		scene.add( bottomStep );
+		buildBottomStep();
+
+		scene.add( spreader );
+		buildSpreader();
+	}
+
+
+	function buildSpreader() {
+
+		var path = [ 
+			10, -12, 30, 20, 10, -5, 200, 5, 10, -20, 30, 20, 10, -5, 200, 5, 10, -20, 30, 12, 10,
+			62,
+			-10, 12, -30, -20, -10, 5, -200, -5, -10, 20, -30, -20, -10, 5, -200, -5, -10, 20, -30, -12, -10,
+			-62
+		];
+
+		var boundary = buildVerticesBySingles( path );
+
+		spreader.add( drawPolyline( boundary ) ); 
+
+		spreader.position.z = 100;
+
+	}
+
+	function buildVerticesBySingles( path, parameters ) {
+
+		var p = parameters || {};
+		var x = p.x ? p.x : 0;
+		var y = p.y ? p.y : 0;
+		var vertices = [  v( x, y ) ];
+
+		for ( var i = 0; i < path.length; ) {
+
+			x += path[ i++ ];
+			vertices.push( v( x, y ) );
+
+			y += path[ i++ ];
+			vertices.push( v( x, y ) )
+
+		}
+
+		return vertices;
+
+	}
+
+	function buildBottomStep( ) {
+
+		var path = [ 55, 100, -5, 20, 30, -20, -5, -100, 400, 100, -5, 20, 30, -20, -5, -100, 55, 365, -550, -365 ];
+
+		var boundary = buildVerticesBySingles( path );
+
+		holes = [];
+
+		holes.push( buildBoneI( { x: 100, y: 200 } ) );
+		holes.push( buildBoneI( { x: 350, y: 200 } ) );
+
+		bottomStep.add( drawPolyline( boundary, { holes: holes } ) ); 
+
+		bottomStep.position.x = -250;
+		bottomStep.position.z = -300;
+
 	}
 
 	function buildTopStep() {
@@ -85,14 +149,14 @@
 		holes.push( buildBoneL( { x: 100, y: 50 } ) );
 		holes.push( buildBoneL( { x: 350, y: 50 } ) );
  
-		obj.add( drawPolyline( boundary, { holes: holes } ) ); 
+		topStep.add( drawPolyline( boundary, { holes: holes } ) ); 
 
-		obj.position.x = -275;
+		topStep.position.x = -350;
 
 	}
 
 
-	function buildBoneI( parameters ) {
+	function buildBoneIxxx( parameters ) {
 
 		var p = parameters || {}; 
 
@@ -111,7 +175,19 @@
 
 	}
 
-	function buildBoneL( parameters ) {
+	function buildBoneI( parameters ) {
+
+		var p = parameters || {}; 
+
+		path = [ 12, -5, 108, 5, 12, -30, -12, 5, -108, -5, -12, 30 ];
+
+		vertices = buildVerticesBySingles( path, p );
+
+		return vertices;
+
+	}
+
+	function buildBoneLccc( parameters ) {
 
 		path = [
 
@@ -128,6 +204,15 @@
 		return vertices;
 	}
 
+
+	function buildBoneL( parameters ) {
+
+		path = [ 12, 5 , 108, -5, 12, 50, 5, 12, -30, -12, 5, -25, -100, 5, -12, -30 ];
+
+		vertices = buildVerticesBySingles( path, parameters  );
+
+		return vertices;
+	}
 
 // translate relative coordinates to absolute coordinates
 

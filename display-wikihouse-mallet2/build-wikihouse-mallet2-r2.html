@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang=en >
 <head>
-<title>build-wikihouse-stepup-r1.html</title>
+<title>build-wikihouse-mallet2-r2.html</title>
 <meta charset=utf-8 />
 <meta name=viewport content='width=device-width,user-scalable=no,minimum-scale=1.0,maximum-scale=1.0' />
 </head>
@@ -11,9 +11,13 @@
 <script src=http://mrdoob.github.io/three.js/examples/js/libs/stats.min.js ></script>
 <script>
 
+	var pathOutside = [ v( 0, 8 ), v( 0, 142 ), v( 8, 150 ), v( 92, 150 ), v( 100, 142 ), v( 100, 8 ), v( 92, 0 ), v( 8, 0) ];
+	var pathInside = [ 
+		v( 0, 8 ), v( 0, 142 ), v( 8, 150 ), v( 92, 150 ), v( 100, 142 ), v( 100, 95 ), v( 350, 95 ), v( 350, 55 ), 
+		v( 100, 55 ), v( 100, 8 ), v( 92, 0 ), v( 8, 0 ) 
+	];
   
-	var obj = new THREE.Object3D();
-
+	var mallet = new THREE.Object3D();
 	var thickness = 18;
 	var pi = Math.PI;
 
@@ -31,9 +35,7 @@
 		info = document.body.appendChild( document.createElement( 'div' ) );
 		info.style.cssText = 'margin: 20px; position: absolute; ';
 		info.innerHTML = '<a href="" ><h1>' + document.title + '</h1></a>' +
-			'<p>Building the SetUp from a list of vertices of boundaries and holes for each component</p>' +
-			'<p>2015-05-04 ~ WIP</p>' +
-			'<div id=msg1 ></div>' +
+			'<div id=msg >Building the mallet from a list of vertices for each component</div>' +
 		'';
 
 		stats = new Stats();
@@ -66,91 +68,62 @@
 		var axisHelper = new THREE.AxisHelper( 50 );
 		scene.add( axisHelper );
 
-		scene.add( obj );
+		scene.add( mallet );
 
-		buildTopStep();
-	}
-
-	function buildTopStep() {
-
-		path = [ [ 0, 0 ], [ 550, 0 ], [ 0, 250 ], [ -550, 0 ] ];
-
-		var boundary = buildVertices( path );
-
-		holes = [];
-
-		holes.push( buildBoneI( { x: 100, y: 200 } ) );
-		holes.push( buildBoneI( { x: 350, y: 200 } ) );
-
-		holes.push( buildBoneL( { x: 100, y: 50 } ) );
-		holes.push( buildBoneL( { x: 350, y: 50 } ) );
- 
-		obj.add( drawPolyline( boundary, { holes: holes } ) ); 
-
-		obj.position.x = -275;
+		buildMallet();
 
 	}
 
 
-	function buildBoneI( parameters ) {
+	function drawHead( width, height, fillet, parameters ) {
 
-		var p = parameters || {}; 
+		vertices = [
 
-		path = [
+			v( fillet, 0 ), v( width - fillet, 0), 
+			v( width, fillet ), v( width, height - fillet), 
+			v( width - fillet, height ), v(fillet, height ),
+			v( 0, height - fillet ), v( 0, fillet )
+			
+		]
 
-			[ 12, 0 ], [0, -5 ], [ 108, 0 ], [0, 5 ],
-			[ 12, 0 ], [0, -30 ], //[0, 0 ], [0, 0 ],
-			[ -12, 0 ], [0, 5 ], [ -108, 0 ], [0, -5 ],
-			[ -12, 0 ], [0, 30 ]//, [0, 0 ], [0, 0 ]
+		return drawPolyline( vertices, parameters );
 
-		];
+	}
+	
+	function drawHeadHandle( width, height, handleWidth, handleHeight, fillet, parameters ) {
+		var dHeight = ( height - handleHeight ) / 2
+		vertices = [
 
-		vertices = buildVertices( path, p );
+			v( 0, fillet ), v( fillet, 0 ), v( width - fillet, 0), 
+			v( width, fillet ), 
+			v( width, dHeight ), v( width + handleWidth, dHeight ),
+			v( width + handleWidth, height - dHeight ), v( width, height - dHeight ),
+			v( width, height - fillet), 
+			v( width - fillet, height ), v(fillet, height ),
+			v( 0, height - fillet )
+			
+		]
 
-		return vertices;
+		return drawPolyline( vertices, parameters );
 
 	}
 
-	function buildBoneL( parameters ) {
 
-		path = [
+	function buildMallet() {
 
-			[ 12, 0 ], [0, 5 ], [ 108, 0 ], [0, -5 ],
-			[ 12, 0 ], [0, 50 ],
-			[ 5, 0 ], [0, 12 ], [ -30, 0 ], [0, -12 ],
-			[ 5, 0 ], [0, -25 ], [ -100, 0 ], [ 0, 5 ], 
-			[ -12, 0 ], [ 0, -30 ]
+		mallet.add( drawHead( 100, 150, 8, { pz: 100 } ) );
+		mallet.add( drawHeadHandle( 100, 150, 250, 40, 8, { pz: 75 } ) );
+		mallet.add( drawHeadHandle( 100, 150, 250, 40, 8, { pz: 50 } ) );
+//		mallet.add( drawPolyline( pathInside, { pz: 75 } ) );
+//		mallet.add( drawPolyline( pathInside, { pz: 50} ) );
+		mallet.add( drawHead( 100, 150, 8, { pz: 25 } ) );
 
-		];
+		mallet.rotation.z = -0.5 * pi;
+		mallet.rotation.y = 0.25 * pi;
+		mallet.position.set( -50, 280, -50 );
 
-		vertices = buildVertices( path, parameters  );
-
-		return vertices;
-	}
-
-
-// translate relative coordinates to absolute coordinates
-
-	function buildVertices( path, parameters ) {
-
-		var p = parameters ? parameters : {};
-		var x = p.x ? p.x : 0;
-		var y = p.y ? p.y : 0;
-		var vertices = [];
-
-		for ( var i = 0; i < path.length; i++ ) {
-
-			x += path[ i ][ 0 ];
-			y += path[ i ][ 1 ];
-
-			vertices.push( v( x, y ) )
-
-		}
-
-		return vertices;
 
 	}
-
 
 	function drawPolyline( vertices, parameters ) {
 
@@ -164,20 +137,10 @@
 		ry = parameters.ry ? parameters.ry : 0;
 		rz = parameters.rz ? parameters.rz : 0;
 
-		holes = parameters.holes ? parameters.holes : 0;
-
 		var material = new THREE.MeshNormalMaterial();
 
 		var shape = new THREE.Shape();
 		shape.fromPoints( vertices );
-
-		for ( var i = 0; i < holes.length; i++ ) {
-
-			var holePath = new THREE.Path();
-			holePath.fromPoints( holes[ i ] );
-			shape.holes.push( holePath );
-
-		}
 
 		var geometry = shape.extrude( { amount: thickness, bevelEnabled: false} );
 		geometry.applyMatrix( new THREE.Matrix4().makeTranslation( px, py, pz ) );
