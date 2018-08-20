@@ -6,10 +6,10 @@
 <meta name=viewport content='width=device-width,user-scalable=no,minimum-scale=1.0,maximum-scale=1.0' />
 </head>
 <body>
-<script src=http://mrdoob.github.io/three.js/build/three.min.js ></script>
-<script src=http://mrdoob.github.io/three.js/examples/js/controls/OrbitControls.js ></script>
-<script src=http://mrdoob.github.io/three.js/examples/js/libs/stats.min.js ></script>
-<script src=http://mrdoob.github.com/three.js/examples/js/libs/tween.min.js ></script>
+<script src=https://rawgit.com/mrdoob/three.js/r80/build/three.min.js ></script>
+<script src=https://rawgit.com/mrdoob/three.js/r80/examples/js/controls/OrbitControls.js ></script>
+<script src=https://rawgit.com/mrdoob/three.js/r80/examples/js/libs/stats.min.js ></script>
+<script src=https://rawgit.com/mrdoob/three.js/r80/examples/js/libs/tween.min.js ></script>
 <script>
 
 	var fileName = 'StepUp_1_r12.dxf';
@@ -43,7 +43,7 @@
 			'<p><button onclick=returnAllToStartTween(); >Return all to start</button></p>' +
 			'<p><button onclick=assembleQuicklyTween(); >Assemble Quickly</button>' +
 //			'<p>Exploded View<br><input type=range id=inpStretch min=0 max=100 value=0 step=1 onclick=setExplodeStructure(); /></p>' +
-			'<div id=msg1 ></div>' +	
+			'<div id=msg1 ></div>' +
 		'';
 
 // Heads Up
@@ -196,7 +196,7 @@
 
 console.log( 'oops col ', id );
 
-			return;	
+			return;
 
 		}
 
@@ -211,7 +211,7 @@ console.log( 'oops col ', id );
 
 		}
 
-		thickness = vertices.length >  12 || id === 25 ? 20 : 30;	
+		thickness = vertices.length >  12 || id === 25 ? 20 : 30;
 		thickness = 18;
 		geometry = shape.extrude( { amount: thickness, bevelEnabled: false} );
 		geometry.applyMatrix( new THREE.Matrix4().makeTranslation( -39600, -28200, -500 ) );
@@ -247,9 +247,9 @@ console.log( 'oops col ', id );
 
 
 	function onDocumentTouchStart( event ) {
-		
+
 		event.preventDefault();
-		
+
 		event.clientX = event.touches[0].clientX;
 		event.clientY = event.touches[0].clientY;
 		onDocumentMouseDown( event );
